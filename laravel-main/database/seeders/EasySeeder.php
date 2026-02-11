@@ -10,7 +10,7 @@ class EasySeeder extends Seeder
 {
     public function run()
     {
-        echo "📝 Ajout des utilisateurs...\n";
+        echo " Ajout des utilisateurs...\n";
         
         // أضف مستخدمين فقط
         DB::table('users')->insert([
@@ -30,7 +30,7 @@ class EasySeeder extends Seeder
             ],
         ]);
         
-        echo "✅ Utilisateurs ajoutés!\n";
+        echo "Utilisateurs ajoutés!\n";
         echo "Admin: admin@test.com / admin123\n";
         echo "Manager: manager@test.com / manager123\n";
     }

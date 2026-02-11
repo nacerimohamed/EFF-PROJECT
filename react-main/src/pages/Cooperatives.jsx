@@ -4,8 +4,10 @@ import axios from "axios";
 import { FaMapMarkerAlt, FaPhone, FaRegImage } from "react-icons/fa";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useTranslation } from "react-i18next";
 
 const Cooperatives = () => {
+  const { t } = useTranslation();
   const [cooperatives, setCooperatives] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,7 +25,7 @@ const Cooperatives = () => {
         setCooperatives(response.data.data);
       }
     } catch (err) {
-      setError("Erreur lors du chargement des coopératives");
+      setError(t('cooperatives.error'));
       console.error("Error fetching cooperatives:", err);
     } finally {
       setLoading(false);
@@ -51,7 +53,7 @@ const Cooperatives = () => {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-white to-green-200">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-green-600 mx-auto mb-4 shadow-lg"></div>
-            <p className="text-gray-700 text-lg font-semibold">Chargement des coopératives...</p>
+            <p className="text-gray-700 text-lg font-semibold">{t('cooperatives.loading')}</p>
           </div>
         </div>
         <Footer />
@@ -70,7 +72,7 @@ const Cooperatives = () => {
               onClick={fetchCooperatives}
               className="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full hover:scale-105 transition font-semibold shadow-lg"
             >
-              Réessayer
+              {t('common.retry')}
             </button>
           </div>
         </div>
@@ -86,9 +88,9 @@ const Cooperatives = () => {
       {/* Hero */}
       <div className="bg-gradient-to-r from-green-600 via-green-700 to-green-800 text-white py-16 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Nos Coopératives</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t('cooperatives.title')}</h1>
           <p className="text-xl text-green-100 max-w-2xl mx-auto">
-            Découvrez nos producteurs locaux et leurs produits de qualité 🇲🇦
+            {t('cooperatives.subtitle')}
           </p>
         </div>
       </div>
@@ -103,7 +105,7 @@ const Cooperatives = () => {
           </div>
           <input
             type="text"
-            placeholder="Rechercher..."
+            placeholder={t('cooperatives.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-10 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 placeholder-gray-400 text-gray-700 transition"
@@ -115,7 +117,7 @@ const Cooperatives = () => {
       <div className="max-w-7xl mx-auto px-6 py-12">
         {filteredCooperatives.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-gray-600 text-xl">Aucune coopérative trouvée</p>
+            <p className="text-gray-600 text-xl">{t('cooperatives.noResults')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -139,7 +141,7 @@ const Cooperatives = () => {
                     ) : (
                       <div className="flex flex-col items-center text-gray-400">
                         <FaRegImage className="text-4xl mb-2"/>
-                        <p className="text-sm font-medium">لا توجد صورة</p>
+                        <p className="text-sm font-medium">{t('cooperatives.noImage')}</p>
                       </div>
                     )}
                   </div>
@@ -165,7 +167,7 @@ const Cooperatives = () => {
                       to={`/cooperatives/${cooperative.id}`}
                       className="block w-full text-center bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-3 rounded-full hover:scale-105 transition font-semibold shadow"
                     >
-                      Voir les produits
+                      {t('cooperatives.viewProducts')}
                     </Link>
                   </div>
                 </div>

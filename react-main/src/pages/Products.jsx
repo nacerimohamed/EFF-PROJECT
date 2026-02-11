@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useTranslation } from "react-i18next";
 
 const Products = () => {
+  const { t } = useTranslation();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState(""); // state للبحث
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     fetchProducts();
@@ -20,7 +22,7 @@ const Products = () => {
       const response = await axios.get("http://localhost:8000/api/products");
       if (response.data.success) setProducts(response.data.data);
     } catch (err) {
-      setError("Erreur lors du chargement des produits");
+      setError(t('products.error'));
       console.error("Error fetching products:", err);
     } finally {
       setLoading(false);
@@ -34,14 +36,11 @@ const Products = () => {
     const phone = product.cooperative?.whatsapp || product.cooperative?.phone;
     if (phone) {
       const cleanPhone = phone.replace(/\D/g, "");
-      const message = encodeURIComponent(
-        `Hello, I'm interested in this product: ${product.name}`
-      );
+      const message = encodeURIComponent(t('products.whatsappMessage', { productName: product.name }));
       window.open(`https://wa.me/${cleanPhone}?text=${message}`, "_blank");
-    } else alert("WhatsApp contact not available for this cooperative");
+    } else alert(t('products.noWhatsApp'));
   };
 
-  // فلترة المنتجات حسب النص في search
   const filteredProducts = products.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -53,7 +52,7 @@ const Products = () => {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 via-green-50 to-green-200">
           <div className="text-center">
             <div className="h-16 w-16 border-4 border-green-300 border-t-green-600 rounded-full animate-spin mx-auto shadow-lg"></div>
-            <p className="mt-4 text-green-700 text-lg font-medium">Chargement des produits...</p>
+            <p className="mt-4 text-green-700 text-lg font-medium">{t('products.loading')}</p>
           </div>
         </div>
         <Footer />
@@ -71,7 +70,7 @@ const Products = () => {
               onClick={fetchProducts}
               className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl transition font-semibold shadow-md"
             >
-              Réessayer
+              {t('common.retry')}
             </button>
           </div>
         </div>
@@ -86,9 +85,9 @@ const Products = () => {
       {/* Hero */}
       <div className="bg-gradient-to-r from-green-700 via-green-600 to-green-500 text-white py-20 shadow-lg">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-5xl font-extrabold mb-4 drop-shadow-md">Nos Produits</h1>
+          <h1 className="text-5xl font-extrabold mb-4 drop-shadow-md">{t('products.title')}</h1>
           <p className="text-green-100 text-lg max-w-2xl mx-auto">
-            Produits locaux marocains issus des coopératives 🇲🇦
+            {t('products.subtitle')}
           </p>
         </div>
       </div>
@@ -98,7 +97,7 @@ const Products = () => {
         <div className="relative w-full md:w-1/2 lg:w-1/3 mx-auto">
           <input
             type="text"
-            placeholder="Rechercher un produit..."
+            placeholder={t('products.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-4 py-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-green-600 placeholder-gray-400 text-gray-700 transition"
@@ -110,7 +109,7 @@ const Products = () => {
       <div className="max-w-7xl mx-auto px-6 py-16 bg-green-50">
         {filteredProducts.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-green-600 text-xl">Aucun produit correspondant</p>
+            <p className="text-green-600 text-xl">{t('products.noResults')}</p>
           </div>
         ) : (
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -131,7 +130,7 @@ const Products = () => {
                   />
 
                   <div className="absolute top-4 right-4 bg-green-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow">
-                    {product.price} DH
+                    {t('products.price', { price: product.price })}
                   </div>
                 </div>
 
@@ -146,16 +145,16 @@ const Products = () => {
                   )}
 
                   <div className="mb-4 bg-green-50 rounded-xl p-3 border border-green-100">
-                    <p className="text-xs text-green-500 uppercase">Coopérative</p>
+                    <p className="text-xs text-green-500 uppercase">{t('products.cooperative')}</p>
                     <p className="text-green-700 font-semibold">
-                      {product.cooperative?.name || "Non spécifié"}
+                      {product.cooperative?.name || t('products.unspecified')}
                     </p>
                   </div>
 
                   <div className="mt-auto space-y-2">
                     <div className="flex justify-between items-center border-t border-green-100 pt-2">
                       <span className="text-sm text-green-600">
-                        Stock :
+                        {t('products.stock')}:
                         <span className="font-semibold text-green-700 ml-1">{product.quantity}</span>
                       </span>
 
@@ -163,7 +162,7 @@ const Products = () => {
                         to={`/products/${product.id}`}
                         className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-md"
                       >
-                        Voir détails
+                        {t('products.viewDetails')}
                       </Link>
                     </div>
 
@@ -172,7 +171,7 @@ const Products = () => {
                         onClick={() => handleWhatsAppClick(product)}
                         className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl transition shadow-md"
                       >
-                        Acheter sur WhatsApp
+                        {t('products.buyOnWhatsApp')}
                       </button>
                     )}
                   </div>
