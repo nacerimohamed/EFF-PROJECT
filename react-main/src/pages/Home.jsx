@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
-
 import Footer from "../components/Footer";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
+  const { t } = useTranslation();
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [featuredCooperatives, setFeaturedCooperatives] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -94,29 +95,27 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
-              Produits en Vedette
+              {t('home.featuredProducts')}
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Découvrez nos derniers produits locaux et biologiques
+              {t('home.productsDescription')}
             </p>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-green-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Chargement des produits...</p>
+              <p className="mt-4 text-gray-600">{t('home.loadingProducts')}</p>
             </div>
           ) : featuredProducts.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8">
               {featuredProducts.map((product, index) => {
-                // Déterminer l'ID de la coopérative
                 let cooperativeId = null;
                 
                 if (product.cooperative) {
                   cooperativeId = product.cooperative.id || product.cooperative._id;
                 }
                 
-                // Si pas d'ID direct, essayer de trouver dans les propriétés du produit
                 if (!cooperativeId) {
                   cooperativeId = product.cooperativeId || product.cooperative_id;
                 }
@@ -136,7 +135,7 @@ const Home = () => {
                         }}
                       />
                       <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                        {product.price} DH
+                        {t('home.price', { price: product.price })}
                       </div>
                     </div>
                     
@@ -154,7 +153,7 @@ const Home = () => {
                       <p className="text-sm text-green-700 font-semibold mb-4">
                         {product.cooperative?.name || 
                          product.cooperative?.nom || 
-                         "Coopérative"}
+                         t('home.cooperativeDetails')}
                       </p>
 
                       <div className="space-y-3">
@@ -162,16 +161,15 @@ const Home = () => {
                           to={`/products/${product.id || product._id}`}
                           className="block w-full text-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-semibold"
                         >
-                          Voir détails
+                          {t('home.productDetails')}
                         </Link>
                         
-                        {/* Partie "Voir produits" - CORRECTION : Rediriger vers la page de la coopérative */}
                         {cooperativeId && (
                           <Link
                             to={`/cooperatives/${cooperativeId}`}
                             className="block w-full text-center border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition font-semibold text-sm"
                           >
-                            Voir tous les produits de cette coopérative
+                            {t('home.viewAllCooperativeProducts')}
                           </Link>
                         )}
                       </div>
@@ -182,7 +180,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-600">Aucun produit en vedette pour le moment</p>
+              <p className="text-gray-600">{t('home.noProducts')}</p>
             </div>
           )}
 
@@ -191,7 +189,7 @@ const Home = () => {
               to="/products"
               className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition font-semibold text-lg shadow-md hover:shadow-lg"
             >
-              Voir tous les produits →
+              {t('home.viewAllProducts')}
             </Link>
           </div>
         </div>
@@ -202,17 +200,17 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">
-              Nos Coopératives Partenaires
+              {t('home.featuredCooperatives')}
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Rencontrez nos producteurs locaux engagés pour la qualité
+              {t('home.cooperativesDescription')}
             </p>
           </div>
 
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-green-600 mx-auto"></div>
-              <p className="mt-4 text-gray-600">Chargement des coopératives...</p>
+              <p className="mt-4 text-gray-600">{t('home.loadingCooperatives')}</p>
             </div>
           ) : featuredCooperatives.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-8">
@@ -232,7 +230,7 @@ const Home = () => {
                         className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                         onError={(e) => {
                           e.target.onerror = null;
-                          const coopName = cooperative.nom || cooperative.name || "Coopérative";
+                          const coopName = cooperative.nom || cooperative.name || t('cooperatives.title');
                           e.target.src = `https://via.placeholder.com/400x250/059669/ffffff?text=${encodeURIComponent(coopName)}`;
                         }}
                       />
@@ -255,20 +253,18 @@ const Home = () => {
                       )}
 
                       <div className="flex flex-col space-y-3">
-                        {/* Bouton pour voir les détails de la coopérative */}
                         <Link
                           to={`/cooperatives/${cooperativeId}`}
                           className="block w-full text-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition font-semibold text-sm"
                         >
-                          Voir détails de la coopérative
+                          {t('home.cooperativeDetails')}
                         </Link>
                         
-                        {/* Bouton pour voir les produits de cette coopérative */}
                         <Link
                           to={`/products?cooperative=${cooperativeId}`}
                           className="block w-full text-center border border-green-600 text-green-600 px-4 py-2 rounded-lg hover:bg-green-50 transition font-semibold text-sm"
                         >
-                          Voir les produits
+                          {t('home.viewProducts')}
                         </Link>
                       </div>
                     </div>
@@ -278,7 +274,7 @@ const Home = () => {
             </div>
           ) : (
             <div className="text-center py-8">
-              <p className="text-gray-600">Aucune coopérative en vedette pour le moment</p>
+              <p className="text-gray-600">{t('home.noCooperatives')}</p>
             </div>
           )}
 
@@ -287,16 +283,14 @@ const Home = () => {
               to="/cooperatives"
               className="inline-block bg-green-600 text-white px-8 py-3 rounded-lg hover:bg-green-700 transition font-semibold text-lg shadow-md hover:shadow-lg"
             >
-              Découvrir toutes les coopératives →
+              {t('home.viewAllCooperatives')}
             </Link>
           </div>
         </div>
       </section>
 
-      
       <Footer />
     </>
-    
   );
 };
 

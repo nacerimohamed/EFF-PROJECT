@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 const ProductCard = ({ product }) => {
   const getProductImage = () => {
     return product.image || "https://via.placeholder.com/300x200/10b981/ffffff?text=Produit";
@@ -29,9 +30,9 @@ const ProductCard = ({ product }) => {
             e.target.src = "https://via.placeholder.com/300x200/10b981/ffffff?text=Produit";
           }}
         />
-        <div className="absolute top-3 right-3 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-md">
-          {product.price} DH
-        </div>
+        <div className="absolute top-3 right-3 bg-stone-900/90 text-amber-50 px-2.5 py-1 rounded-md text-xs font-medium">
+  {t('products.price', { price: products.price })} DH
+</div>
       </div>
       
       <div className="p-6 flex-1 flex flex-col">

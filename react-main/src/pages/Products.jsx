@@ -129,8 +129,8 @@ const Products = () => {
                     }}
                   />
 
-                  <div className="absolute top-4 right-4 bg-green-600 text-white px-4 py-1 rounded-full text-sm font-bold shadow">
-                    {t('products.price', { price: product.price })}
+                  <div className="absolute top-3 right-3 bg-green-600 hover:bg-green-700 text-amber-50 px-2.5 py-1 rounded-md text-xs font-medium">
+                        {product.price} DH
                   </div>
                 </div>
 

@@ -11,6 +11,8 @@ use App\Http\Controllers\Api\Manager\ProductController;
 use App\Http\Controllers\Api\PublicProductController;
 use App\Http\Controllers\Api\PublicCooperativeController;
 
+
+
 // ===== PUBLIC ROUTES =====
 // Products (public access)
 Route::get('/products', [PublicProductController::class, 'index']);
