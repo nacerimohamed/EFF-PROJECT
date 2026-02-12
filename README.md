@@ -29,33 +29,37 @@ mysql -V      # Doit afficher MySQL/MariaDB
 ```
 
 ---
-Étape 1: XAMPP
+## 🔧 Étape 1: XAMPP
+
 Démarrer Apache + MySQL
 
-Étape 2: Base de données
-PHPMyAdmin → Nouvelle DB: cooperative_market
+## 🔧 Étape 2: Base de données
 
-Étape 3: Backend
-bash
+**PHPMyAdmin → Nouvelle DB: cooperative_market**
+
+## 🔧 Étape 3: Backend
+```bash
 cd C:\xampp\htdocs\cooperative-market\fixed-project\laravel-main
 composer install
 copy .env.example .env
 Modifier .env:
-
+```
 env
 DB_DATABASE=cooperative_market
 DB_USERNAME=root
 DB_PASSWORD=
-bash
+```bash
 php artisan key:generate
 php artisan migrate --seed
 php artisan storage:link
 php artisan serve
+```
 Étape 4: Frontend
-bash
+```bash
 cd C:\xampp\htdocs\cooperative-market\fixed-project\react-main
 npm install
 npm run dev
+```
 Étape 5: Connexion
 http://localhost:5173
 
@@ -71,59 +75,52 @@ Frontend:    http://localhost:5173
 Option B: Modifier les URLs dans React
 Dans tous les fichiers qui appellent l'API, remplacer:
 
-javascript
+```javascript
 // Avant
 axios.get('http://localhost:8000/api/...')
 
 // Après (Apache XAMPP)
 axios.get('http://localhost/cooperative-market/fixed-project/laravel-main/public/api/...')
+```
 ✅ VÉRIFICATION FINALE
-bash
+```bash
 # 1. XAMPP
 Apache: ✅ Running (Port 80)
 MySQL:  ✅ Running (Port 3306)
-
+```
 # 2. Base de données
+
 PHPMyAdmin: ✅ http://localhost/phpmyadmin
 DB Name:    ✅ cooperative_market
 Tables:     ✅ users, cooperatives, products
 
 # 3. Backend
+
 Laravel: ✅ http://localhost:8000
 API:     ✅ http://localhost:8000/api/cooperatives
 
 # 4. Frontend
+
 React:   ✅ http://localhost:5173
 
 # 5. Connexion
+
 Admin:   ✅ admin@test.com / admin123
 Manager: ✅ manager@test.com / manager123
+
 🎉 FÉLICITATIONS!
-3ADI KHEDAMAT! 🇲🇦
 
-Admin: admin@test.com / admin123
+✅Admin: admin@test.com / admin123
 
-Manager: manager@test.com / manager123
+✅Manager: manager@test.com / manager123
 
-XAMPP: Apache + MySQL démarrés
+✅XAMPP: **Apache + MySQL démarrés**
 
-Base de données: cooperative_market
+✅Base de données: **cooperative_market**
 
-Backend: Laravel sur port 8000
+✅Backend: **Laravel sur port 8000**
 
-Frontend: React sur port 5173
+✅Frontend: **React sur port 5173**
 
-Ila bghiti tchouf PHPMyAdmin:
-http://localhost/phpmyadmin
-
-Ila bghiti tchouf l'application:
-http://localhost:5173
-
-Ila bghiti tchouf API:
-http://localhost:8000/api/cooperatives
-
-Ila bghiti tbeddel compte:
-
-Logout puis login avec l'autre compte
 
 Bonne chance! 🚀
