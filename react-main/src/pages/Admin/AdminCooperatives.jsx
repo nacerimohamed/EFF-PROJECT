@@ -89,6 +89,18 @@ const AdminCooperatives = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Vérifier la taille (2MB max)
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error("L'image ne doit pas dépasser 2MB");
+        return;
+      }
+      
+      // Vérifier le type
+      if (!file.type.startsWith('image/')) {
+        toast.error("Le fichier doit être une image");
+        return;
+      }
+
       // Révoquer l'ancienne URL
       if (imagePreview && !imagePreview.startsWith(API_URL)) {
         URL.revokeObjectURL(imagePreview);
@@ -141,7 +153,9 @@ const AdminCooperatives = () => {
       image: null,
     });
     
+    // CORRECTION ICI : Construction correcte de l'URL de l'image
     if (cooperative.image) {
+      // Si l'image est stockée dans storage
       setImagePreview(`${API_URL}/storage/${cooperative.image}`);
     } else {
       setImagePreview(null);
@@ -235,10 +249,36 @@ const AdminCooperatives = () => {
     coop.adresse?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Obtenir l'URL complète de l'image
+  // CORRECTION ICI : Fonction pour obtenir l'URL complète de l'image
   const getImageUrl = (imagePath) => {
     if (!imagePath) return null;
+    
+    // Si c'est déjà une URL complète
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Si c'est un chemin relatif vers storage
+    if (imagePath.startsWith('/storage/')) {
+      return `${API_URL}${imagePath}`;
+    }
+    
+    // Si c'est juste le nom du fichier
     return `${API_URL}/storage/${imagePath}`;
+  };
+
+  // Fonction pour gérer l'erreur de chargement d'image
+  const handleImageError = (e) => {
+    e.target.onerror = null;
+    e.target.style.display = 'none';
+    // Afficher l'icône de placeholder à la place
+    const parent = e.target.parentElement;
+    if (parent) {
+      const placeholder = parent.querySelector('.image-placeholder');
+      if (placeholder) {
+        placeholder.style.display = 'flex';
+      }
+    }
   };
 
   if (loading) {
@@ -342,17 +382,27 @@ const AdminCooperatives = () => {
                   {filteredCooperatives.map((cooperative) => (
                     <div key={cooperative.id} className="p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-start space-x-3 mb-3">
-                        <div className="flex-shrink-0">
+                        <div className="flex-shrink-0 relative">
                           {cooperative.image ? (
-                            <img
-                              className="h-12 w-12 rounded-lg object-cover border border-gray-200"
-                              src={getImageUrl(cooperative.image)}
-                              alt={cooperative.nom}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.style.display = 'none';
-                              }}
-                            />
+                            <>
+                              <img
+                                className="h-12 w-12 rounded-lg object-cover border border-gray-200"
+                                src={getImageUrl(cooperative.image)}
+                                alt={cooperative.nom}
+                                onError={(e) => {
+                                  e.target.onerror = null;
+                                  e.target.style.display = 'none';
+                                  // Afficher le placeholder
+                                  const placeholder = e.target.parentElement.querySelector('.image-placeholder');
+                                  if (placeholder) placeholder.style.display = 'flex';
+                                }}
+                              />
+                              <div className="image-placeholder hidden h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
+                                <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                </svg>
+                              </div>
+                            </>
                           ) : (
                             <div className="h-12 w-12 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
                               <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -435,17 +485,26 @@ const AdminCooperatives = () => {
                         <tr key={cooperative.id} className={`hover:bg-green-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
-                              <div className="flex-shrink-0 h-10 w-10 mr-3">
+                              <div className="flex-shrink-0 h-10 w-10 mr-3 relative">
                                 {cooperative.image ? (
-                                  <img
-                                    className="h-10 w-10 rounded-lg object-cover border border-gray-200"
-                                    src={getImageUrl(cooperative.image)}
-                                    alt={cooperative.nom}
-                                    onError={(e) => {
-                                      e.target.onerror = null;
-                                      e.target.style.display = 'none';
-                                    }}
-                                  />
+                                  <>
+                                    <img
+                                      className="h-10 w-10 rounded-lg object-cover border border-gray-200"
+                                      src={getImageUrl(cooperative.image)}
+                                      alt={cooperative.nom}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.style.display = 'none';
+                                        const placeholder = e.target.parentElement.querySelector('.image-placeholder');
+                                        if (placeholder) placeholder.style.display = 'flex';
+                                      }}
+                                    />
+                                    <div className="image-placeholder hidden h-10 w-10 rounded-lg bg-gray-100 items-center justify-center border border-gray-200">
+                                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                      </svg>
+                                    </div>
+                                  </>
                                 ) : (
                                   <div className="h-10 w-10 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
                                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -715,7 +774,7 @@ const AdminCooperatives = () => {
                     value={formData.whatsapp}
                     onChange={handleChange}
                     className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Numéro WhatsApp"
+                    placeholder="212XXXXXXXXX"
                   />
                 </div>
 
@@ -746,6 +805,10 @@ const AdminCooperatives = () => {
                         src={imagePreview}
                         alt="Preview"
                         className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg border border-gray-200"
+                        onError={() => {
+                          // Si l'image ne charge pas, afficher placeholder
+                          setImagePreview(null);
+                        }}
                       />
                       <button
                         type="button"

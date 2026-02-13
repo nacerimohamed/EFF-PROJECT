@@ -11,6 +11,12 @@ use App\Http\Controllers\Api\Manager\ProductController;
 use App\Http\Controllers\Api\PublicProductController;
 use App\Http\Controllers\Api\PublicCooperativeController;
 
+use App\Http\Controllers\ContactController;
+
+Route::post('/contact', [ContactController::class, 'store']);
+Route::get('/contact', [ContactController::class, 'index']);
+
+
 
 
 // ===== PUBLIC ROUTES =====
@@ -35,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Current user routes
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    
 
     // ===== ADMIN ROUTES =====
     Route::middleware('role:admin')->prefix('admin')->group(function () {
@@ -45,6 +52,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/users', [UserManagementController::class, 'store']);
         Route::put('/users/{id}', [UserManagementController::class, 'update']);
         Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
+
+// contact CRUD routes
+          Route::get('/contacts/recent', [ContactController::class, 'recent']);
+    Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
+    Route::patch('/contacts/{id}/read', [ContactController::class, 'markAsRead']);
         
         // Cooperatives CRUD routes - ADMIN ONLY MANAGES COOPERATIVES
         Route::get('/cooperatives', [CooperativeController::class, 'index']);

@@ -33,8 +33,7 @@ const Contact = () => {
     try {
       const token = localStorage.getItem('token');
       
-      const response = await axios.post(
-        'http://localhost:8000/api/contact',
+      const response = await axios.post("http://127.0.0.1:8000/api/contact",
         {
           name: formData.name,
           email: formData.email,
