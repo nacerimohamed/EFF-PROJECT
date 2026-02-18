@@ -28,6 +28,7 @@ class ContactController extends Controller
     {
         $recentMessages = Contact::latest()
             ->take(10)
+            
             ->get();
 
         return response()->json([
