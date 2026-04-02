@@ -242,13 +242,13 @@ npm run dev
 Si vous avez exécuté le seeder (`php artisan db:seed --class=EasySeeder`), vous avez ces comptes:
 
 ### 🔑 Compte Administrateur
-- **Email:** `admin@cooperative.com`
-- **Mot de passe:** `password`
+- **Email:** `admin@test.com`
+- **Mot de passe:** `admin123`
 - **Accès:** Gestion des utilisateurs et des coopératives
 
 ### 🔑 Compte Manager
-- **Email:** `manager@cooperative.com`
-- **Mot de passe:** `password`
+- **Email:** `manager@test.com`
+- **Mot de passe:** `manager123`
 - **Accès:** Gestion des produits
 
 ---
@@ -277,7 +277,7 @@ Vous devriez voir:
 
 ### Test 3: Connexion
 1. Cliquer sur "Se connecter"
-2. Entrer: `admin@admin.com` / `password`
+2. Entrer: `admin@test.com` / `admin123`
 3. Vous devriez être redirigé vers le Dashboard Admin
 
 ---
@@ -546,6 +546,7 @@ fixed-project/
 │
 └── react-main/            # Frontend React
     ├── src/
+        ├── i18n/
     │   ├── pages/
     │   │   ├── Admin/     # Pages admin
     │   │   └── Manager/   # Pages manager
@@ -560,8 +561,8 @@ fixed-project/
 ### 1. Se connecter en tant qu'Admin
 - Aller sur http://localhost:5173
 - Cliquer sur "Se connecter"
-- Email: `admin@admin.com`
-- Password: `password`
+- Email: `admin@test.com`
+- Password: `admin123`
 
 ### 2. Créer une coopérative
 - Dans le dashboard admin, cliquer "Gérer les coopératives"
@@ -571,7 +572,7 @@ fixed-project/
 
 ### 3. Se déconnecter et se connecter en tant que Manager
 - Se déconnecter
-- Se reconnecter avec: `manager@manager.com` / `password`
+- Se reconnecter avec: `manager@test.com` / `manager123`
 
 ### 4. Créer un produit
 - Cliquer "Gestion des Produits"
