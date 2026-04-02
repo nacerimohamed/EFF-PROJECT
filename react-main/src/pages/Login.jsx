@@ -253,7 +253,7 @@ const Login = () => {
             {/* Footer simple */}
             <div className="mt-8 text-center">
               <p className="text-gray-500 text-sm">
-                © 2024 Tous droits réservés
+                © Tous droits réservés
               </p>
             </div>
           </div>
